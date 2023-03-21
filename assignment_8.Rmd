@@ -1,0 +1,10 @@
+---
+title: "assignment_8"
+author: "Wyatt"
+date: "2023-03-21"
+output: github_document
+---
+``` {r}
+library(tidyverse)
+```
+
