@@ -16,6 +16,11 @@ library(tidyverse)
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
+``` r
+library(dplyr)
+library(ggplot2)
+```
+
 # Assignment 8: Iteration and conditional execution
 
 <br>
@@ -215,7 +220,7 @@ system.time(dino_mass)
 ```
 
     ##    user  system elapsed 
-    ##   0.000   0.000   0.001
+    ##       0       0       0
 
 - for loop (you will need to put the entire for loop inside the brackets
   of `system.time()`:
@@ -230,7 +235,7 @@ for (i in 1:length(dinosaur_lengths)) {
 ```
 
     ##    user  system elapsed 
-    ##   0.006   0.000   0.005
+    ##   0.006   0.000   0.007
 
 <br>
 
@@ -424,4 +429,42 @@ loop. We recommend you to do the cleanup within the loop though as a
 chance to practice. In the next (optional) question, however, it is
 necessary to clean up the data in the loop before you can combine them.
 
-<br>
+``` r
+df_combined2 <- bind_rows(buoy_1987, buoy_1988, buoy_1989, buoy_1990)
+
+
+df_combined3 <- df_combined2 %>% 
+  select(YY, MM, WVHT, WTMP) %>% 
+  rename(year = YY, month = MM, wave_heights = WVHT, temperatures = WTMP)
+
+
+yearly_summary <- df_combined3 %>% 
+  group_by(year, month) %>% 
+  summarize(avg_wave_height = mean(wave_heights, na.rm = TRUE),
+            avg_temperature = mean(temperatures, na.rm = TRUE))
+```
+
+    ## `summarise()` has grouped output by 'year'. You can override using the
+    ## `.groups` argument.
+
+- Average temperature change from 1987 to 1990;
+
+``` r
+yearly_summary %>% 
+  ggplot(mapping = aes(x = month, y = avg_temperature, color = year)) +
+  geom_line() + 
+  geom_point()
+```
+
+![](assignment_8_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+- Average wave height change from 1987 to 1990;
+
+``` r
+yearly_summary %>% 
+  ggplot(mapping = aes(x = month, y = avg_wave_height, color = year)) +
+  geom_line() + 
+  geom_point()
+```
+
+![](assignment_8_files/figure-gfm/unnamed-chunk-15-1.png)<!-- --> <br>
